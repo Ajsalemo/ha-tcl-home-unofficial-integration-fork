@@ -9,6 +9,8 @@ class DeviceTypeEnum(StrEnum):
     DEHUMIDIFIER_DEM = "Dehumidifier DEM"
     DEHUMIDIFIER_DF = "Dehumidifier DF"
     DUCT_AC = "Duct"
+    AIR_PURIFIER_BREEVA_A3 = "Breeva A3"
+    AIR_PURIFIER_BREEVA_A5 = "Breeva A5"
 
 
 def is_split_ac_with_number(device_type:str)-> bool:
@@ -28,6 +30,8 @@ def is_implemented_by_integration(device_type: str) -> bool:
         "Dehumidifier DEM",
         "Dehumidifier DF",
         "Duct",
+        "Breeva A3",
+        "Breeva A5",
     ]
     
     if is_split_ac_with_number(device_type):
@@ -53,4 +57,8 @@ def calculateDeviceType(device_type: str) -> DeviceTypeEnum | None:
         return DeviceTypeEnum.DUCT_AC
     elif device_type == "Split AC" or is_split_ac_with_number(device_type):
         return DeviceTypeEnum.SPLIT_AC
+    elif device_type == "Breeva A3":
+        return DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3
+    elif device_type == "Breeva A5":
+        return DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5
     return None

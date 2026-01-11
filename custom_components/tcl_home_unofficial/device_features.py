@@ -1,7 +1,7 @@
 """."""
 
-from enum import StrEnum
 import logging
+from enum import StrEnum
 
 from .device_capabilities import DeviceCapabilityEnum
 from .device_types import DeviceTypeEnum
@@ -75,7 +75,7 @@ class DeviceFeatureEnum(StrEnum):
     USER_CONFIG_BEHAVIOR_MEMORIZE_FAN_SPEED_BY_MODE = "user_config.behavior.memorize_fan_speed_by_mode"
     USER_CONFIG_BEHAVIOR_MEMORIZE_HUMIDITY_BY_MODE = "user_config.behavior.memorize_humidity_by_mode"
     USER_CONFIG_BEHAVIOR_SILENT_BEEP_WHEN_TURN_ON = "user_config.behavior.silent_beep_when_turn_on"
-
+    
 
 def has_property(aws_thing_state_reported: dict[str, any], propertyName: str) -> bool:
     return propertyName in aws_thing_state_reported
