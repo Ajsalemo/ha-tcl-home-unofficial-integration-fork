@@ -385,5 +385,13 @@ def getSupportedFeatures(
                 features.append(DeviceFeatureEnum.CLIMATE)
                 
             return features
+        
+        case DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:
+            features = [
+                DeviceFeatureEnum.SWITCH_POWER,
+                DeviceFeatureEnum.SENSOR_IS_ONLINE,
+            ]
+            return features
+
         case _:
             return []
