@@ -14,9 +14,8 @@ from .device_enums import DehumidifierModeEnum, ModeEnum
 from .device_features import DeviceFeatureEnum, getSupportedFeatures
 from .device_types import DeviceTypeEnum, calculateDeviceType
 from .tcl import GetThingsResponseData
-from .tcl_device_breeva_a5 import (TCL_BreevaA5_DeviceData,
-                                   get_stored_breeva_a5_data,
-                                   handle_breeva_a5_mode_change)
+from .tcl_device_breeva import (TCL_Breeva_DeviceData, get_stored_breeva_data,
+                                handle_breeva_mode_change)
 from .tcl_device_dehumidifier_dem import (TCL_Dehumidifier_DEM_DeviceData,
                                           get_stored_dehumidifier_dem_data,
                                           handle_dehumidifier_dem_mode_change)
@@ -141,8 +140,8 @@ class Device:
                         aws_thing_state=aws_thing["state"]["reported"],
                         delta=aws_thing["state"].get("delta", {}),
                     )
-                case DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:
-                    self.data = TCL_BreevaA5_DeviceData(
+                case DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3 | DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:
+                    self.data = TCL_Breeva_DeviceData(
                         device_id=self.device_id,
                         aws_thing_state=aws_thing["state"]["reported"],
                         delta=aws_thing["state"].get("delta", {}),
@@ -176,7 +175,7 @@ class Device:
         | TCL_Dehumidifier_DEM_DeviceData
         | TCL_Dehumidifier_DF_DeviceData
         | TCL_DuctAC_DeviceData
-        | TCL_BreevaA5_DeviceData
+        | TCL_Breeva_DeviceData
         | None
     ) = None
 
@@ -316,8 +315,8 @@ async def get_device_storage(hass: HomeAssistant, device: Device) -> None:
         return await get_stored_dehumidifier_dem_data(hass, device.device_id)
     elif device.device_type == DeviceTypeEnum.DEHUMIDIFIER_DF:
         return await get_stored_dehumidifier_df_data(hass, device.device_id)
-    elif device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:   
-        return await get_stored_breeva_a5_data(hass, device.device_id)
+    elif device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3 or device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:   
+        return await get_stored_breeva_data(hass, device.device_id)
 
 
 def get_desired_state_for_mode_change(
@@ -374,7 +373,7 @@ def get_desired_state_for_mode_change(
             stored_data=stored_data,
         )
     elif device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:   
-        desired_state = handle_breeva_a5_mode_change(
+        desired_state = handle_breeva_mode_change(
             desired_state=desired_state,
             value=value,
             supported_features=device.supported_features,

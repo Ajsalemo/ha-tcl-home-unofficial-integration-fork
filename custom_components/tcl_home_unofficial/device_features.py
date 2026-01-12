@@ -385,8 +385,8 @@ def getSupportedFeatures(
                 features.append(DeviceFeatureEnum.CLIMATE)
                 
             return features
-        
-        case DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:
+        # Breeva A3 and A5 pretty much have the same features
+        case DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3 | DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:
             features = [
                 DeviceFeatureEnum.SWITCH_POWER,
                 DeviceFeatureEnum.SENSOR_IS_ONLINE,

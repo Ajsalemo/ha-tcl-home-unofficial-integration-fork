@@ -14,7 +14,7 @@ from .device_features import DeviceFeatureEnum
 _LOGGER = logging.getLogger(__name__)
 
 @dataclass
-class TCL_BreevaA5_DeviceData:
+class TCL_Breeva_DeviceData:
     def __init__(self, device_id: str, aws_thing_state: dict, delta: dict) -> None:
         self.device_id = device_id
         self.power_switch = int(
@@ -58,7 +58,7 @@ class TCL_BreevaA5_DeviceData:
     panel_light_auto_off: int | bool
     favourite_mode_switch: int | bool
 
-async def get_stored_breeva_a5_data(
+async def get_stored_breeva_data(
     hass: HomeAssistant, device_id: str
 ) -> dict[str, any]:
     need_save = False
@@ -90,7 +90,7 @@ async def get_stored_breeva_a5_data(
     return stored_data
 
 
-def handle_breeva_a5_mode_change(
+def handle_breeva_mode_change(
     desired_state: dict,
     value: ModeEnum,
     supported_features: list[DeviceFeatureEnum],
