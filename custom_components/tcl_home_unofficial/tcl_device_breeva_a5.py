@@ -1,5 +1,6 @@
 """."""
 
+import logging
 from dataclasses import dataclass
 
 from homeassistant.core import HomeAssistant
@@ -10,6 +11,7 @@ from .data_storage import (get_stored_data, safe_set_value, set_stored_data,
 from .device_enums import ModeEnum
 from .device_features import DeviceFeatureEnum
 
+_LOGGER = logging.getLogger(__name__)
 
 @dataclass
 class TCL_BreevaA5_DeviceData:
@@ -61,6 +63,8 @@ async def get_stored_breeva_a5_data(
 ) -> dict[str, any]:
     need_save = False
     stored_data = await get_stored_data(hass, device_id)
+    _LOGGER.info("Breeva A5 stored data: %s", stored_data)
+    
     if stored_data is None:
         stored_data = {}
         need_save = True
@@ -94,7 +98,8 @@ def handle_breeva_a5_mode_change(
 ) -> dict:
     match value:
         case ModeEnum.AUTO:
-            desired_state["windSpeed"] = 0
-        case ModeEnum.FAN:
-            desired_state["windSpeed"] = 1
+            desired_state["workMode"] = 0
+        # case ModeEnum.FAN:
+        #     desired_state["workMode"] = 1
+        #     desired_state["windSpeed"] = 0
     return desired_state
