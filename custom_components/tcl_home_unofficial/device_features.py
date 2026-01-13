@@ -391,7 +391,12 @@ def getSupportedFeatures(
                 DeviceFeatureEnum.SWITCH_POWER,
                 DeviceFeatureEnum.SENSOR_IS_ONLINE,
             ]
+
+            if has_property(aws_thing_state_reported, "windSpeed"):
+                features.append(DeviceFeatureEnum.SELECT_WIND_SPEED)
+                
             return features
+        
 
         case _:
             return []

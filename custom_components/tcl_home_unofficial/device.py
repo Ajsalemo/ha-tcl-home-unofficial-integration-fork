@@ -315,9 +315,10 @@ async def get_device_storage(hass: HomeAssistant, device: Device) -> None:
         return await get_stored_dehumidifier_dem_data(hass, device.device_id)
     elif device.device_type == DeviceTypeEnum.DEHUMIDIFIER_DF:
         return await get_stored_dehumidifier_df_data(hass, device.device_id)
-    elif device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3 or device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:   
+    elif device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3:   
         return await get_stored_breeva_data(hass, device.device_id)
-
+    elif device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:
+        return await get_stored_breeva_data(hass, device.device_id)
 
 def get_desired_state_for_mode_change(
     device: Device, stored_data: dict, value: ModeEnum
@@ -372,6 +373,13 @@ def get_desired_state_for_mode_change(
             supported_features=device.supported_features,
             stored_data=stored_data,
         )
+    elif device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3:   
+        desired_state = handle_breeva_mode_change(
+            desired_state=desired_state,
+            value=value,
+            supported_features=device.supported_features,
+            stored_data=stored_data,
+        )    
     elif device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:   
         desired_state = handle_breeva_mode_change(
             desired_state=desired_state,
