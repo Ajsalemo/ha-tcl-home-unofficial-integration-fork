@@ -805,7 +805,7 @@ async def async_setup_entry(
                 )
             )
 
-        _LOGGER.info("Device %s supported features: %s", device.device_name, device.supported_features)
+        _LOGGER.info("Device %s supported features: %s", device.device_type, device.supported_features)
         if DeviceFeatureEnum.AIR_PURIFIER_BREEVA_FAN_WIND_SPEED in device.supported_features:
             switches.append(
                 SelectHandler(
