@@ -10,11 +10,13 @@ class ModeEnum(StrEnum):
     FAN = "Fan"
     AUTO = "Auto"
 
+
 class DehumidifierModeEnum(StrEnum):
     DRY = "Dry"
     TURBO = "Turbo"
     COMFORT = "Comfort"
     CONTINUE = "Continue"
+
 
 class UpAndDownAirSupplyVectorEnum(StrEnum):
     UP_AND_DOWN_SWING = "Up and down swing"
@@ -206,7 +208,9 @@ class PortableWind4ValueSeedEnum(StrEnum):
     AUTO = "Auto"
 
 
-def getPortableWind4ValueSeed(wind_speed: int, has_auto_mode: bool) -> PortableWind4ValueSeedEnum:
+def getPortableWind4ValueSeed(
+    wind_speed: int, has_auto_mode: bool
+) -> PortableWind4ValueSeedEnum:
     if has_auto_mode:
         match wind_speed:
             case 3:
@@ -229,6 +233,7 @@ def getPortableWind4ValueSeed(wind_speed: int, has_auto_mode: bool) -> PortableW
                 return PortableWind4ValueSeedEnum.LOW
             case _:
                 return PortableWind4ValueSeedEnum.LOW
+
 
 class WindowAcWindSeedEnum(StrEnum):
     SPEED_1 = "1"
@@ -327,6 +332,7 @@ def getGeneratorMode(generator_mode: int) -> GeneratorModeEnum:
         case 0:
             return GeneratorModeEnum.NONE
 
+
 class WindSpeedLowMediumHigh(StrEnum):
     LOW = "Low"
     MEDIUM = "Medium"
@@ -342,3 +348,23 @@ def getWindSpeedLowMediumHigh(windSpeed: int) -> GeneratorModeEnum:
         case 2:
             return WindSpeedLowMediumHigh.HIGH
     return GeneratorModeEnum.LOW
+
+
+class AirPurifierFanWindSpeedEnum(StrEnum):
+    LOW = "1"
+    MEDIUM = "2"
+    HIGH = "3"
+    AUTO = "0"
+
+
+def getAirPurifierFanWindSpeed(windSpeed: int) -> AirPurifierFanWindSpeedEnum:
+    match windSpeed:
+        case 1:
+            return AirPurifierFanWindSpeedEnum.LOW
+        case 2:
+            return AirPurifierFanWindSpeedEnum.MEDIUM
+        case 3:
+            return AirPurifierFanWindSpeedEnum.HIGH
+        case 0:
+            return AirPurifierFanWindSpeedEnum.AUTO
+    return AirPurifierFanWindSpeedEnum.AUTO

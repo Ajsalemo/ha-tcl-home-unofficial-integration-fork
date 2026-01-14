@@ -8,7 +8,7 @@ from homeassistant.core import HomeAssistant
 from .calculations import celsius_to_fahrenheit, try_get_value
 from .data_storage import (get_stored_data, safe_set_value, set_stored_data,
                            setup_common_init_values)
-from .device_enums import ModeEnum
+from .device_enums import ModeEnum, getWindSpeed
 from .device_features import DeviceFeatureEnum
 
 _LOGGER = logging.getLogger(__name__)
@@ -99,7 +99,7 @@ def handle_breeva_mode_change(
     match value:
         case ModeEnum.AUTO:
             desired_state["workMode"] = 0
-        # case ModeEnum.FAN:
-        #     desired_state["workMode"] = 1
-        #     desired_state["windSpeed"] = 0
+        case ModeEnum.FAN:
+            desired_state["workMode"] = 1
+            desired_state["windSpeed"] = 0
     return desired_state

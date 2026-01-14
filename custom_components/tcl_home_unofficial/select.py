@@ -9,47 +9,27 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .calculations import celsius_to_fahrenheit
 from .config_entry import New_NameConfigEntry
 from .coordinator import IotDeviceCoordinator
+from .data_storage import (get_stored_data, safe_get_value, safe_set_value,
+                           set_stored_data)
 from .device import Device, get_desired_state_for_mode_change
+from .device_enums import (AirPurifierFanWindSpeedEnum, DehumidifierModeEnum,
+                           FreshAirEnum, GeneratorModeEnum,
+                           LeftAndRightAirSupplyVectorEnum, ModeEnum,
+                           PortableWind4ValueSeedEnum, PortableWindSeedEnum,
+                           SleepModeEnum, TemperatureTypeEnum,
+                           UpAndDownAirSupplyVectorEnum, WindFeelingEnum,
+                           WindowAcWindSeedEnum, WindSeed7GearEnum,
+                           WindSeedEnum, WindSpeedLowMediumHigh,
+                           getAirPurifierFanWindSpeed, getFreshAir,
+                           getGeneratorMode, getLeftAndRightAirSupplyVector,
+                           getPortableWind4ValueSeed, getPortableWindSeed,
+                           getSleepMode, getTemperatureType,
+                           getUpAndDownAirSupplyVector, getWindFeeling,
+                           getWindowAcWindSeed, getWindSeed7Gear, getWindSpeed,
+                           getWindSpeedLowMediumHigh)
 from .device_features import DeviceFeatureEnum
 from .device_types import DeviceTypeEnum
-from .device_enums import (
-    ModeEnum,
-    DehumidifierModeEnum,
-    LeftAndRightAirSupplyVectorEnum,
-    getLeftAndRightAirSupplyVector,
-    SleepModeEnum,
-    getSleepMode,
-    UpAndDownAirSupplyVectorEnum,
-    getUpAndDownAirSupplyVector,
-    WindSeed7GearEnum,
-    getWindSeed7Gear,
-    WindSeedEnum,
-    getWindSpeed,
-    PortableWindSeedEnum,
-    getPortableWindSeed,
-    PortableWind4ValueSeedEnum,
-    getPortableWind4ValueSeed,
-    TemperatureTypeEnum,
-    getTemperatureType,
-    FreshAirEnum,
-    getFreshAir,
-    GeneratorModeEnum,
-    getGeneratorMode,
-    WindFeelingEnum,
-    getWindFeeling,
-    WindowAcWindSeedEnum,
-    getWindowAcWindSeed,
-    WindSpeedLowMediumHigh,
-    getWindSpeedLowMediumHigh,    
-)
-
 from .tcl_entity_base import TclEntityBase
-from .data_storage import (
-    safe_get_value,
-    get_stored_data,
-    safe_set_value,
-    set_stored_data,
-)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -355,6 +335,21 @@ class DesiredStateHandlerForSelect:
             await set_stored_data(self.hass, self.device.device_id, stored_data)
 
         desired_state = self.desired_state_SELECT_WIND_SPEED(value)
+        return await self.coordinator.get_aws_iot().async_set_desired_state(
+            self.device.device_id, desired_state
+        )
+    
+    async def AIR_PURIFIER_BREEVA_FAN_WIND_SPEED(self, value: AirPurifierFanWindSpeedEnum):
+        desired_state = {}
+        match value:
+            case AirPurifierFanWindSpeedEnum.LOW:
+                desired_state = {"windSpeed": 1}
+            case AirPurifierFanWindSpeedEnum.MEDIUM:
+                desired_state = {"windSpeed": 2}
+            case AirPurifierFanWindSpeedEnum.HIGH:
+                desired_state = {"windSpeed": 3}
+            case AirPurifierFanWindSpeedEnum.AUTO:
+                desired_state = {"windSpeed": 0}
         return await self.coordinator.get_aws_iot().async_set_desired_state(
             self.device.device_id, desired_state
         )
@@ -807,6 +802,19 @@ async def async_setup_entry(
                     type="Mode",
                     name="Mode",
                     icon_fn=lambda device: "mdi:set-none",
+                )
+            )
+
+        if DeviceFeatureEnum.AIR_PURIFIER_BREEVA_FAN_WIND_SPEED in device.supported_features:
+            switches.append(
+                SelectHandler(
+                    hass=hass,
+                    coordinator=coordinator,
+                    device=device,
+                    deviceFeature=DeviceFeatureEnum.AIR_PURIFIER_BREEVA_FAN_WIND_SPEED,
+                    type="AirPurifierFanWindSpeed",
+                    name="Fan Wind Speed",
+                    icon_fn=lambda device: "mdi:weather-windy",
                 )
             )
 
