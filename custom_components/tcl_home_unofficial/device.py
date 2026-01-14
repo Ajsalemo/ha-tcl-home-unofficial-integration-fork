@@ -257,9 +257,12 @@ class Device:
                 DeviceFeatureEnum.SELECT_WIND_SPEED
                 in self.supported_features
             ):
-                self.mode_enum_to_value_mapp[AirPurifierFanWindSpeedStrEnum.LOW] = 0
-                self.mode_value_to_enum_mapp[work_mode] = AirPurifierFanWindSpeedStrEnum.LOW
-                work_mode += 1
+                self.mode_enum_to_value_mapp[AirPurifierFanWindSpeedStrEnum.LOW] = 1
+                self.mode_value_to_enum_mapp[1] = AirPurifierFanWindSpeedStrEnum.LOW
+                self.mode_enum_to_value_mapp[AirPurifierFanWindSpeedStrEnum.MEDIUM] = 2
+                self.mode_value_to_enum_mapp[2] = AirPurifierFanWindSpeedStrEnum.MEDIUM
+                self.mode_enum_to_value_mapp[AirPurifierFanWindSpeedStrEnum.HIGH] = 3
+                self.mode_value_to_enum_mapp[3] = AirPurifierFanWindSpeedStrEnum.HIGH
 
         if DeviceFeatureEnum.INTERNAL_IS_DEHUMIDIFIER in self.supported_features:
             if self.device_type == DeviceTypeEnum.DEHUMIDIFIER_DEM:

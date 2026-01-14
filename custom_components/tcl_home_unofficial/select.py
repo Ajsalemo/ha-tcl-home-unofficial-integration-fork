@@ -822,7 +822,7 @@ def get_SELECT_WIND_SPEED_available_fn(device: Device) -> str:
 
 def get_AIR_PURIFIER_BREEVA_FAN_WIND_SPEED_available_fn(device: Device) -> str:
     _LOGGER.info("Checking work_mode for device %s: %s", device.device_id, device.data.work_mode)
-    mode = device.mode_value_to_enum_mapp.get(device.data.work_mode, AirPurifierFanWindSpeedStrEnum.LOW)
+    mode = device.mode_value_to_enum_mapp.get(device.data.work_mode, getAirPurifierFanWindSpeed(device.data.work_mode))
     return mode
 
 
