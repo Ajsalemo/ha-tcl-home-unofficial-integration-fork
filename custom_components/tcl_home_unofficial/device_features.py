@@ -390,7 +390,7 @@ def getSupportedFeatures(
             features = [
                 DeviceFeatureEnum.SWITCH_POWER,
                 DeviceFeatureEnum.SENSOR_IS_ONLINE,
-                DeviceFeatureEnum.AIR_PURIFIER_BREEVA_FAN_WIND_SPEED
+                DeviceFeatureEnum.SELECT_WIND_SPEED
             ]
             
             return features

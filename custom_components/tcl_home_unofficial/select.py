@@ -51,14 +51,18 @@ class DesiredStateHandlerForSelect:
         self.device = device
 
     async def call_select_option(self, value: str) -> str:
-        _LOGGER.info("SelectHandler.async_select_option: %s - %s", value,self.deviceFeature)
+        _LOGGER.info(
+            "SelectHandler.async_select_option: %s - %s", value, self.deviceFeature
+        )
         match self.deviceFeature:
             case DeviceFeatureEnum.SELECT_SLEEP_MODE:
                 return await self.SELECT_SLEEP_MODE(value=value)
             case DeviceFeatureEnum.SELECT_MODE:
                 return await self.SELECT_MODE(value=value)
             case DeviceFeatureEnum.SELECT_DEHUMIDIFIER_WIND_SPEED_LOW_MEDIUM_HEIGH:
-                return await self.SELECT_DEHUMIDIFIER_WIND_SPEED_LOW_MEDIUM_HEIGH(value=value)
+                return await self.SELECT_DEHUMIDIFIER_WIND_SPEED_LOW_MEDIUM_HEIGH(
+                    value=value
+                )
             case DeviceFeatureEnum.SELECT_WIND_SPEED:
                 return await self.SELECT_WIND_SPEED(value=value)
             case DeviceFeatureEnum.SELECT_WIND_SPEED_7_GEAR:
@@ -87,11 +91,23 @@ class DesiredStateHandlerForSelect:
             case DeviceFeatureEnum.SELECT_SLEEP_MODE:
                 return getSleepMode(self.device.data.sleep)
             case DeviceFeatureEnum.SELECT_MODE:
-                if DeviceFeatureEnum.INTERNAL_IS_DEHUMIDIFIER in self.device.supported_features:
-                    return self.device.mode_value_to_enum_mapp.get(self.device.data.work_mode,DehumidifierModeEnum.DRY)
+                if (
+                    DeviceFeatureEnum.INTERNAL_IS_DEHUMIDIFIER
+                    in self.device.supported_features
+                ):
+                    return self.device.mode_value_to_enum_mapp.get(
+                        self.device.data.work_mode, DehumidifierModeEnum.DRY
+                    )
                 else:
-                    default_ac_mode=ModeEnum.AUTO if DeviceFeatureEnum.MODE_AC_AUTO in self.device.supported_features else ModeEnum.COOL
-                    return self.device.mode_value_to_enum_mapp.get(self.device.data.work_mode,default_ac_mode)
+                    default_ac_mode = (
+                        ModeEnum.AUTO
+                        if DeviceFeatureEnum.MODE_AC_AUTO
+                        in self.device.supported_features
+                        else ModeEnum.COOL
+                    )
+                    return self.device.mode_value_to_enum_mapp.get(
+                        self.device.data.work_mode, default_ac_mode
+                    )
             case DeviceFeatureEnum.SELECT_WIND_SPEED:
                 return getWindSpeed(
                     wind_speed=self.device.data.wind_speed,
@@ -217,9 +233,9 @@ class DesiredStateHandlerForSelect:
         )
 
         desired_state = {"workMode": self.device.mode_enum_to_value_mapp.get(value, 0)}
-        
+
         desired_state = get_desired_state_for_mode_change(
-            device= self.device,
+            device=self.device,
             stored_data=stored_data,
             value=value,
         )
@@ -227,7 +243,7 @@ class DesiredStateHandlerForSelect:
         if memorize_temp_by_mode:
             saved_target_temperature = stored_data["target_temperature"][value]["value"]
             desired_state["targetTemperature"] = saved_target_temperature
-                
+
         if memorize_humidity_by_mode:
             saved_humidity = stored_data["humidity"][value]["value"]
             desired_state["Humidity"] = saved_humidity
@@ -240,19 +256,33 @@ class DesiredStateHandlerForSelect:
                 desired_state_override = self.desired_state_SELECT_WIND_SPEED(
                     saved_fan_speed
                 )
-            if (DeviceFeatureEnum.SELECT_PORTABLE_WIND_SPEED in self.device.supported_features):
+            if (
+                DeviceFeatureEnum.SELECT_PORTABLE_WIND_SPEED
+                in self.device.supported_features
+            ):
                 desired_state_override = self.desired_state_SELECT_PORTABLE_WIND_SPEED(
                     saved_fan_speed
                 )
-            if (DeviceFeatureEnum.SELECT_PORTABLE_WIND_4VALUE_SPEED in self.device.supported_features):
-                desired_state_override = self.desired_state_SELECT_PORTABLE_WIND_4VALUE_SPEED(
-                    saved_fan_speed
+            if (
+                DeviceFeatureEnum.SELECT_PORTABLE_WIND_4VALUE_SPEED
+                in self.device.supported_features
+            ):
+                desired_state_override = (
+                    self.desired_state_SELECT_PORTABLE_WIND_4VALUE_SPEED(
+                        saved_fan_speed
+                    )
                 )
-            if (DeviceFeatureEnum.SELECT_WIND_SPEED_7_GEAR in self.device.supported_features):
+            if (
+                DeviceFeatureEnum.SELECT_WIND_SPEED_7_GEAR
+                in self.device.supported_features
+            ):
                 desired_state_override = self.desired_state_SELECT_WIND_SPEED_7_GEAR(
                     saved_fan_speed
                 )
-            if (DeviceFeatureEnum.SELECT_WINDOW_AS_WIND_SPEED in self.device.supported_features):
+            if (
+                DeviceFeatureEnum.SELECT_WINDOW_AS_WIND_SPEED
+                in self.device.supported_features
+            ):
                 desired_state_override = self.desired_state_SELECT_WINDOW_AS_WIND_SPEED(
                     saved_fan_speed
                 )
@@ -338,8 +368,10 @@ class DesiredStateHandlerForSelect:
         return await self.coordinator.get_aws_iot().async_set_desired_state(
             self.device.device_id, desired_state
         )
-    
-    async def AIR_PURIFIER_BREEVA_FAN_WIND_SPEED(self, value: AirPurifierFanWindSpeedEnum):
+
+    async def AIR_PURIFIER_BREEVA_FAN_WIND_SPEED(
+        self, value: AirPurifierFanWindSpeedEnum
+    ):
         desired_state = {}
         match value:
             case AirPurifierFanWindSpeedEnum.LOW:
@@ -391,8 +423,9 @@ class DesiredStateHandlerForSelect:
             self.device.device_id, desired_state
         )
 
-
-    def desired_state_SELECT_DEHUMIDIFIER_WIND_SPEED_LOW_MEDIUM_HEIGH(self, value: WindSpeedLowMediumHigh):
+    def desired_state_SELECT_DEHUMIDIFIER_WIND_SPEED_LOW_MEDIUM_HEIGH(
+        self, value: WindSpeedLowMediumHigh
+    ):
         desired_state = {}
         match value:
             case WindSpeedLowMediumHigh.LOW:
@@ -403,7 +436,9 @@ class DesiredStateHandlerForSelect:
                 desired_state = {"windSpeed": 2}
         return desired_state
 
-    async def SELECT_DEHUMIDIFIER_WIND_SPEED_LOW_MEDIUM_HEIGH(self, value: WindSpeedLowMediumHigh):
+    async def SELECT_DEHUMIDIFIER_WIND_SPEED_LOW_MEDIUM_HEIGH(
+        self, value: WindSpeedLowMediumHigh
+    ):
         stored_data = await get_stored_data(self.hass, self.device.device_id)
         mode = self.device.mode_value_to_enum_mapp.get(
             self.device.data.work_mode, ModeEnum.AUTO
@@ -414,7 +449,9 @@ class DesiredStateHandlerForSelect:
         if need_save:
             await set_stored_data(self.hass, self.device.device_id, stored_data)
 
-        desired_state = self.desired_state_SELECT_DEHUMIDIFIER_WIND_SPEED_LOW_MEDIUM_HEIGH(value)
+        desired_state = (
+            self.desired_state_SELECT_DEHUMIDIFIER_WIND_SPEED_LOW_MEDIUM_HEIGH(value)
+        )
         return await self.coordinator.get_aws_iot().async_set_desired_state(
             self.device.device_id, desired_state
         )
@@ -457,9 +494,10 @@ class DesiredStateHandlerForSelect:
         return await self.coordinator.get_aws_iot().async_set_desired_state(
             self.device.device_id, desired_state
         )
-    
-    
-    def desired_state_SELECT_PORTABLE_WIND_4VALUE_SPEED(self, value: PortableWind4ValueSeedEnum):
+
+    def desired_state_SELECT_PORTABLE_WIND_4VALUE_SPEED(
+        self, value: PortableWind4ValueSeedEnum
+    ):
         desired_state = {}
         if DeviceFeatureEnum.MODE_AC_AUTO in self.device.supported_features:
             match value:
@@ -482,7 +520,9 @@ class DesiredStateHandlerForSelect:
 
         return desired_state
 
-    async def SELECT_PORTABLE_WIND_4VALUE_SPEED(self, value: PortableWind4ValueSeedEnum):
+    async def SELECT_PORTABLE_WIND_4VALUE_SPEED(
+        self, value: PortableWind4ValueSeedEnum
+    ):
         stored_data = await get_stored_data(self.hass, self.device.device_id)
         mode = self.device.mode_value_to_enum_mapp.get(
             self.device.data.work_mode,
@@ -693,10 +733,12 @@ def get_SELECT_VERTICAL_DIRECTION_name(device: Device) -> str:
         return "Air flow"
     return "Up and Down air supply"
 
+
 def get_SELECT_HORIZONTAL_DIRECTION_name(device: Device) -> str:
     if device.device_type == DeviceTypeEnum.SPLIT_AC_FRESH_AIR:
         return "Horizontal Air flow"
     return "Left and Right air supply"
+
 
 def get_SELECT_PORTABLE_WIND_SPEED_options(device: Device) -> list[str] | None:
     all = [PortableWindSeedEnum.LOW, PortableWindSeedEnum.HIGH]
@@ -716,8 +758,13 @@ def get_SELECT_PORTABLE_WIND_SPEED_options(device: Device) -> list[str] | None:
 
     return all
 
+
 def get_SELECT_PORTABLE_WIND_4VALUE_SPEED_options(device: Device) -> list[str] | None:
-    all = [PortableWind4ValueSeedEnum.LOW, PortableWind4ValueSeedEnum.MEDIUM, PortableWind4ValueSeedEnum.HIGH]
+    all = [
+        PortableWind4ValueSeedEnum.LOW,
+        PortableWind4ValueSeedEnum.MEDIUM,
+        PortableWind4ValueSeedEnum.HIGH,
+    ]
     if DeviceFeatureEnum.MODE_AC_AUTO in device.supported_features:
         all.append(PortableWind4ValueSeedEnum.AUTO)
 
@@ -730,9 +777,14 @@ def get_SELECT_PORTABLE_WIND_4VALUE_SPEED_options(device: Device) -> list[str] |
         return []
 
     if current_mode == ModeEnum.FAN:
-        return [PortableWind4ValueSeedEnum.LOW, PortableWind4ValueSeedEnum.MEDIUM, PortableWind4ValueSeedEnum.HIGH]
+        return [
+            PortableWind4ValueSeedEnum.LOW,
+            PortableWind4ValueSeedEnum.MEDIUM,
+            PortableWind4ValueSeedEnum.HIGH,
+        ]
 
     return all
+
 
 def get_SELECT_SLEEP_MODE_available_fn(device: Device) -> str:
     mode = device.mode_value_to_enum_mapp.get(
@@ -751,14 +803,17 @@ def get_SELECT_SLEEP_MODE_available_fn(device: Device) -> str:
         return False
     return True
 
+
 def get_SELECT_FRESH_AIR_available_fn(device: Device) -> str:
     if device.data.new_wind_switch == 1:
         return True
     return False
 
+
 def get_SELECT_WIND_SPEED_available_fn(device: Device) -> str:
     mode = device.mode_value_to_enum_mapp.get(device.data.work_mode, ModeEnum.AUTO)
     return mode != ModeEnum.DEHUMIDIFICATION
+
 
 def get_SELECT_PORTABLE_WIND_SPEED_available_fn(device: Device) -> str:
     if DeviceFeatureEnum.MODE_AC_AUTO in device.supported_features:
@@ -771,6 +826,7 @@ def get_SELECT_PORTABLE_WIND_SPEED_available_fn(device: Device) -> str:
             return False
         return device.data.sleep != 1
 
+
 def get_SELECT_PORTABLE_WIND_4VALUE_SPEED_available_fn(device: Device) -> str:
     if DeviceFeatureEnum.MODE_AC_AUTO in device.supported_features:
         return device.data.sleep != 1
@@ -782,6 +838,7 @@ def get_SELECT_PORTABLE_WIND_4VALUE_SPEED_available_fn(device: Device) -> str:
             return False
         return device.data.sleep != 1
 
+
 async def async_setup_entry(
     hass: HomeAssistant,
     config_entry: New_NameConfigEntry,
@@ -792,6 +849,9 @@ async def async_setup_entry(
 
     switches = []
     for device in config_entry.devices:
+        _LOGGER.info(
+            "Device %s supported features: %s", device, device.supported_features
+        )
         if DeviceFeatureEnum.SELECT_MODE in device.supported_features:
             switches.append(
                 SelectHandler(
@@ -804,21 +864,6 @@ async def async_setup_entry(
                     icon_fn=lambda device: "mdi:set-none",
                 )
             )
-
-        _LOGGER.info("Device %s supported features: %s", device, device.supported_features)
-        if DeviceFeatureEnum.AIR_PURIFIER_BREEVA_FAN_WIND_SPEED in device.supported_features:
-            switches.append(
-                SelectHandler(
-                    hass=hass,
-                    coordinator=coordinator,
-                    device=device,
-                    deviceFeature=DeviceFeatureEnum.AIR_PURIFIER_BREEVA_FAN_WIND_SPEED,
-                    type="AirPurifierFanWindSpeed",
-                    name="Fan Wind Speed",
-                    icon_fn=lambda device: "mdi:weather-windy",
-                )
-            )
-
         if DeviceFeatureEnum.SELECT_WIND_SPEED in device.supported_features:
             switches.append(
                 DynamicSelectHandler(
@@ -835,7 +880,7 @@ async def async_setup_entry(
                     ),
                 )
             )
-            
+
         if DeviceFeatureEnum.SELECT_WINDOW_AS_WIND_SPEED in device.supported_features:
             switches.append(
                 SelectHandler(
@@ -849,7 +894,10 @@ async def async_setup_entry(
                 )
             )
 
-        if DeviceFeatureEnum.SELECT_DEHUMIDIFIER_WIND_SPEED_LOW_MEDIUM_HEIGH in device.supported_features:
+        if (
+            DeviceFeatureEnum.SELECT_DEHUMIDIFIER_WIND_SPEED_LOW_MEDIUM_HEIGH
+            in device.supported_features
+        ):
             switches.append(
                 SelectHandler(
                     hass=hass,
@@ -894,7 +942,10 @@ async def async_setup_entry(
                 )
             )
 
-        if DeviceFeatureEnum.SELECT_PORTABLE_WIND_4VALUE_SPEED in device.supported_features:
+        if (
+            DeviceFeatureEnum.SELECT_PORTABLE_WIND_4VALUE_SPEED
+            in device.supported_features
+        ):
             switches.append(
                 DynamicSelectHandler(
                     hass=hass,
@@ -1050,7 +1101,7 @@ class SelectHandler(TclEntityBase, SelectEntity):
         return self.iot_handler.current_state()
 
     async def async_select_option(self, option: str) -> None:
-        #_LOGGER.info("SelectHandler.async_select_option: %s", option)
+        # _LOGGER.info("SelectHandler.async_select_option: %s", option)
         await self.iot_handler.call_select_option(option)
         await self.coordinator.async_refresh()
 
@@ -1090,4 +1141,4 @@ class DynamicSelectHandler(SelectHandler, SelectEntity):
     def available(self) -> bool:
         if self.device.is_online:
             return self.available_fn(self.device)
-        return False   
+        return False
