@@ -1,6 +1,9 @@
 """."""
 
+import logging
 from enum import StrEnum
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class ModeEnum(StrEnum):
@@ -363,6 +366,7 @@ class AirPurifierFanWindSpeedStrEnum(StrEnum):
 
 
 def getAirPurifierFanWindSpeed(windSpeed: int) -> AirPurifierFanWindSpeedEnum:
+    _LOGGER.info("Getting Air Purifier Fan Wind Speed for windSpeed: %s", windSpeed)
     match windSpeed:
         case 1:
             return AirPurifierFanWindSpeedEnum.LOW

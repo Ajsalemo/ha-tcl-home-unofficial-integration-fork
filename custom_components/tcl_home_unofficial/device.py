@@ -253,6 +253,7 @@ class Device:
 
 
         if self.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3 or self.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:
+            _LOGGER.info("Creating mode mappings for Air Purifier Breeva device %s", self.device_id)
             if (
                 DeviceFeatureEnum.SELECT_WIND_SPEED
                 in self.supported_features
