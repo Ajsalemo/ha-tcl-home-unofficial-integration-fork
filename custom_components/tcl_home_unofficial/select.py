@@ -378,6 +378,7 @@ class DesiredStateHandlerForSelect:
         self, value: AirPurifierFanWindSpeedEnum
     ):
         desired_state = {}
+        _LOGGER.info("Setting AIR_PURIFIER_BREEVA_FAN_WIND_SPEED to %s", value)
         match value:
             case AirPurifierFanWindSpeedEnum.LOW:
                 desired_state = {"windSpeed": 1}
@@ -385,8 +386,6 @@ class DesiredStateHandlerForSelect:
                 desired_state = {"windSpeed": 2}
             case AirPurifierFanWindSpeedEnum.HIGH:
                 desired_state = {"windSpeed": 3}
-            case AirPurifierFanWindSpeedEnum.AUTO:
-                desired_state = {"windSpeed": 0}
         return await self.coordinator.get_aws_iot().async_set_desired_state(
             self.device.device_id, desired_state
         )
@@ -823,6 +822,7 @@ def get_SELECT_WIND_SPEED_available_fn(device: Device) -> str:
 def get_AIR_PURIFIER_BREEVA_FAN_WIND_SPEED_available_fn(device: Device) -> str:
     _LOGGER.info("Checking work_mode for device %s: %s", device.device_id, device.data.work_mode)
     mode = device.mode_value_to_enum_mapp.get(device.data.work_mode, getAirPurifierFanWindSpeed(device.data.work_mode))
+    _LOGGER.info("Determined mode for device %s: %s", device.device_id, mode)
     return mode
 
 
