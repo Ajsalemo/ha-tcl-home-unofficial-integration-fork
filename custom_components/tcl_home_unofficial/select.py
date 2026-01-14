@@ -884,7 +884,7 @@ async def async_setup_entry(
                         type="WindSpeed",
                         name="Wind Speed",
                         icon_fn=lambda device: "mdi:weather-windy",
-                        options_values_fn=lambda device: [e.value for e in AirPurifierFanWindSpeedEnum],
+                        options_values_fn=lambda device: [e.value for e in AirPurifierFanWindSpeedStrEnum],
                         available_fn=lambda device: get_AIR_PURIFIER_BREEVA_FAN_WIND_SPEED_available_fn(
                             device
                         ),
