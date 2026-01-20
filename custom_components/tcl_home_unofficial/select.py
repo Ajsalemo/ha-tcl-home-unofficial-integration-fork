@@ -12,8 +12,7 @@ from .coordinator import IotDeviceCoordinator
 from .data_storage import (get_stored_data, safe_get_value, safe_set_value,
                            set_stored_data)
 from .device import Device, get_desired_state_for_mode_change
-from .device_enums import (AirPurifierFanWindSpeedEnum,
-                           AirPurifierFanWindSpeedStrEnum,
+from .device_enums import (AirPurifierFanWindSpeedStrEnum,
                            DehumidifierModeEnum, FreshAirEnum,
                            GeneratorModeEnum, LeftAndRightAirSupplyVectorEnum,
                            ModeEnum, PortableWind4ValueSeedEnum,
