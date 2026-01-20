@@ -66,7 +66,10 @@ class DesiredStateHandlerForSelect:
                     value=value
                 )
             case DeviceFeatureEnum.SELECT_WIND_SPEED:
-                return await self.SELECT_WIND_SPEED(value=value)
+                if self.device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3 or self.device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:
+                    return await self.AIR_PURIFIER_BREEVA_FAN_WIND_SPEED(value=value)
+                else:
+                    return await self.SELECT_WIND_SPEED(value=value)
             case DeviceFeatureEnum.SELECT_WIND_SPEED_7_GEAR:
                 return await self.SELECT_WIND_SPEED_7_GEAR(value=value)
             case DeviceFeatureEnum.SELECT_PORTABLE_WIND_SPEED:
@@ -373,7 +376,9 @@ class DesiredStateHandlerForSelect:
         return await self.coordinator.get_aws_iot().async_set_desired_state(
             self.device.device_id, desired_state
         )
-
+    #  1/14/2026  -LOOK INTO THIS
+    # set_desired_state is adding the wrong state
+    # its  adding "AwsIot.set_desired_state: (CklBHTSAAAE) {'highTemperatureWind': 0, 'turbo': 0, 'silenceSwitch': 0, 'windSpeed': 6}"
     async def AIR_PURIFIER_BREEVA_FAN_WIND_SPEED(
         self, value: AirPurifierFanWindSpeedEnum
     ):
