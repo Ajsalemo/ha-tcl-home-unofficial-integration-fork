@@ -11,7 +11,8 @@ from .data_storage import (get_stored_data, safe_get_value, safe_set_value,
                            set_stored_data)
 from .device_capabilities import DeviceCapabilityEnum, get_capabilities
 from .device_enums import (AirPurifierFanWindSpeedStrEnum,
-                           DehumidifierModeEnum, ModeEnum)
+                           AirPurifierWorkModeStrEnum, DehumidifierModeEnum,
+                           ModeEnum)
 from .device_features import DeviceFeatureEnum, getSupportedFeatures
 from .device_types import DeviceTypeEnum, calculateDeviceType
 from .tcl import GetThingsResponseData
@@ -264,6 +265,14 @@ class Device:
                 self.mode_value_to_enum_mapp[2] = AirPurifierFanWindSpeedStrEnum.MEDIUM
                 self.mode_enum_to_value_mapp[AirPurifierFanWindSpeedStrEnum.HIGH] = 3
                 self.mode_value_to_enum_mapp[3] = AirPurifierFanWindSpeedStrEnum.HIGH
+
+            if DeviceFeatureEnum.SELECT_WORK_MODE in self.supported_features:
+                self.mode_enum_to_value_mapp[AirPurifierWorkModeStrEnum.AUTO] = 0
+                self.mode_value_to_enum_mapp[0] = AirPurifierWorkModeStrEnum.AUTO
+                self.mode_enum_to_value_mapp[AirPurifierWorkModeStrEnum.SLEEP] = 1
+                self.mode_value_to_enum_mapp[1] = AirPurifierWorkModeStrEnum.SLEEP
+                self.mode_enum_to_value_mapp[AirPurifierWorkModeStrEnum.FAN] = 2
+                self.mode_value_to_enum_mapp[2] = AirPurifierWorkModeStrEnum.FAN
 
         if DeviceFeatureEnum.INTERNAL_IS_DEHUMIDIFIER in self.supported_features:
             if self.device_type == DeviceTypeEnum.DEHUMIDIFIER_DEM:
