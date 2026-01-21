@@ -61,28 +61,13 @@ async def get_stored_breeva_data(
 ) -> dict[str, any]:
     need_save = False
     stored_data = await get_stored_data(hass, device_id)
-    _LOGGER.info("Breeva A5 stored data: %s", stored_data)
+    _LOGGER.info("Breeva stored data: %s", stored_data)
     
     if stored_data is None:
         stored_data = {}
         need_save = True
 
     stored_data, need_save = setup_common_init_values(stored_data)
-    # TODO: try to  figure out the a5's state for this
-    # see: https://github.com/nemesa/ha-tcl-home-unofficial-integration/issues/28#issuecomment-3177909270
-    default_wind_speed = "Low"
-    stored_data, need_save = safe_set_value(
-        stored_data, "fan_speed.Cool.value", default_wind_speed
-    )
-    stored_data, need_save = safe_set_value(
-        stored_data, "fan_speed.Dehumidification.value", default_wind_speed
-    )
-    stored_data, need_save = safe_set_value(
-        stored_data, "fan_speed.Fan.value", default_wind_speed
-    )
-    stored_data, need_save = safe_set_value(
-        stored_data, "fan_speed.Auto.value", default_wind_speed
-    )
     if need_save:
         await set_stored_data(hass, device_id, stored_data)
     return stored_data
