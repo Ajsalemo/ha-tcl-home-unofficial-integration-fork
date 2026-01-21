@@ -403,11 +403,11 @@ class DesiredStateHandlerForSelect:
         _LOGGER.info("Setting AIR_PURIFIER_BREEVA_FAN_WIND_SPEED to %s", value)
         match value:
             case AirPurifierFanWindSpeedStrEnum.LOW:
-                desired_state = {"windSpeed": 1}
+                desired_state = {"windSpeed": 1, "workMode": 2}
             case AirPurifierFanWindSpeedStrEnum.MEDIUM:
-                desired_state = {"windSpeed": 2}
+                desired_state = {"windSpeed": 2, "workMode": 2}
             case AirPurifierFanWindSpeedStrEnum.HIGH:
-                desired_state = {"windSpeed": 3}
+                desired_state = {"windSpeed": 3, "workMode": 2}
         return await self.coordinator.get_aws_iot().async_set_desired_state(
             self.device.device_id, desired_state
         )
@@ -416,7 +416,7 @@ class DesiredStateHandlerForSelect:
         stored_data = await get_stored_data(self.hass, self.device.device_id)
         _LOGGER.info("SELECT_WORK_MODE - stored_data: %s", stored_data)
         mode = self.device.mode_value_to_enum_mapp.get(
-            self.device.data.work_mode, AirPurifierFanWindSpeedStrEnum.LOW
+            self.device.data.work_mode, AirPurifierWorkModeStrEnum.AUTO
         )
         stored_data, need_save = safe_set_value(
             stored_data, "fan_speed." + mode + ".value", value, overwrite_if_exists=True
