@@ -15,8 +15,7 @@ from .device_enums import (AirPurifierFanWindSpeedStrEnum,
 from .device_features import DeviceFeatureEnum, getSupportedFeatures
 from .device_types import DeviceTypeEnum, calculateDeviceType
 from .tcl import GetThingsResponseData
-from .tcl_device_breeva import (TCL_Breeva_DeviceData, get_stored_breeva_data,
-                                handle_breeva_mode_change)
+from .tcl_device_breeva import TCL_Breeva_DeviceData, get_stored_breeva_data
 from .tcl_device_dehumidifier_dem import (TCL_Dehumidifier_DEM_DeviceData,
                                           get_stored_dehumidifier_dem_data,
                                           handle_dehumidifier_dem_mode_change)

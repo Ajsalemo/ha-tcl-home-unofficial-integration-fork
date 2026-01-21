@@ -5,11 +5,9 @@ from dataclasses import dataclass
 
 from homeassistant.core import HomeAssistant
 
-from .calculations import celsius_to_fahrenheit, try_get_value
+from .calculations import try_get_value
 from .data_storage import (get_stored_data, safe_set_value, set_stored_data,
                            setup_common_init_values)
-from .device_enums import ModeEnum, getWindSpeed
-from .device_features import DeviceFeatureEnum
 
 _LOGGER = logging.getLogger(__name__)
 
