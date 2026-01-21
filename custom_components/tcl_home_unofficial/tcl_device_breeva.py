@@ -89,13 +89,3 @@ async def get_stored_breeva_data(
         await set_stored_data(hass, device_id, stored_data)
     return stored_data
 
-
-def handle_breeva_mode_change(
-    desired_state: dict,
-    value: ModeEnum,
-    supported_features: list[DeviceFeatureEnum],
-    stored_data: dict,
-) -> dict:
-    # This function is mostly a noop aside from returning desired_state
-    _LOGGER.info("Handling Breeva mode change with value: %s, supported_features: %s and stored_data: %s", value, supported_features, stored_data)
-    return desired_state

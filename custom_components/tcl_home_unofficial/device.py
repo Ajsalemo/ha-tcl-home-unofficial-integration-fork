@@ -418,20 +418,7 @@ def get_desired_state_for_mode_change(
             supported_features=device.supported_features,
             stored_data=stored_data,
         )
-    elif device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3:
-        desired_state = handle_breeva_mode_change(
-            desired_state=desired_state,
-            value=value,
-            supported_features=device.supported_features,
-            stored_data=stored_data,
-        )
-    elif device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:
-        desired_state = handle_breeva_mode_change(
-            desired_state=desired_state,
-            value=value,
-            supported_features=device.supported_features,
-            stored_data=stored_data,
-        )
+        
     return desired_state
 
 
