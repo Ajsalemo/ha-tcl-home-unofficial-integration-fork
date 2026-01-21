@@ -96,10 +96,6 @@ def handle_breeva_mode_change(
     supported_features: list[DeviceFeatureEnum],
     stored_data: dict,
 ) -> dict:
-    match value:
-        case ModeEnum.AUTO:
-            desired_state["workMode"] = 0
-        case ModeEnum.FAN:
-            desired_state["workMode"] = 1
-            desired_state["windSpeed"] = 0
+    # This function is mostly a noop aside from returning desired_state
+    _LOGGER.info("Handling Breeva mode change with value: %s, supported_features: %s and stored_data: %s", value, supported_features, stored_data)
     return desired_state

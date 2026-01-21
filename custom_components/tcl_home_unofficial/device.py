@@ -7,8 +7,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceInfo
 
 from .const import DOMAIN
-from .data_storage import (get_stored_data, safe_get_value, safe_set_value,
-                           set_stored_data)
+from .data_storage import get_stored_data, safe_set_value, set_stored_data
 from .device_capabilities import DeviceCapabilityEnum, get_capabilities
 from .device_enums import (AirPurifierFanWindSpeedStrEnum,
                            AirPurifierWorkModeStrEnum, DehumidifierModeEnum,
