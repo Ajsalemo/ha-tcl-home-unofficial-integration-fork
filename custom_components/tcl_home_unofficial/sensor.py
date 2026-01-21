@@ -2,12 +2,10 @@
 
 import logging
 
-from homeassistant.components.sensor import (
-    SensorDeviceClass,
-    SensorEntity,
-    SensorStateClass,
-)
-from homeassistant.const import UnitOfEnergy, UnitOfTemperature, UnitOfTime, PERCENTAGE
+from homeassistant.components.sensor import (SensorDeviceClass, SensorEntity,
+                                             SensorStateClass)
+from homeassistant.const import (PERCENTAGE, UnitOfEnergy, UnitOfTemperature,
+                                 UnitOfTime)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -166,6 +164,21 @@ async def async_setup_entry(
                     native_unit_of_measurement=UnitOfTime.HOURS,
                     icon_fn=lambda device: "mdi:clock-time-eight-outline",
                     value_fn=lambda device: round((device.extra_tcl_data.get("yesterday_work_time",0)/60),2),
+                )
+            )
+
+        if DeviceFeatureEnum.SENSOR_FILTER_LIFETIME in device.supported_features:
+            sensors.append(
+                IntNumberSensor(
+                    coordinator=coordinator,
+                    device=device,
+                    type="FilterLifeTime",
+                    name="Filter Life Time",
+                    device_classification=SensorDeviceClass.DURATION,
+                    state_classification=SensorStateClass.MEASUREMENT,
+                    native_unit_of_measurement=UnitOfTime.HOURS,
+                    icon_fn=lambda device: "mdi:filter-check",
+                    value_fn=lambda device: device.data.filter_life_time,
                 )
             )
 

@@ -19,6 +19,7 @@ class DeviceFeatureEnum(StrEnum):
     MODE_DEHUMIDIFIER_COMFORT = "mode.dehumidifier.comfort"
     MODE_DEHUMIDIFIER_CONTINUE = "mode.dehumidifier.continue"
     SENSOR_IS_ONLINE = "sensor.is_online"
+    SENSOR_FILTER_LIFETIME = "sensor.filterLifeTime"
     SENSOR_CURRENT_TEMPERATURE = "sensor.current_temperature"
     SENSOR_DEHUMIDIFIER_ENV_HUMIDITY = "sensor.dehumidifier.env_humidity"
     SENSOR_DEHUMIDIFIER_WATER_BUCKET_FULL = "sensor.dehumidifier.is_water_bucket_full"
@@ -390,6 +391,7 @@ def getSupportedFeatures(
             features = [
                 DeviceFeatureEnum.SWITCH_POWER,
                 DeviceFeatureEnum.SENSOR_IS_ONLINE,
+                DeviceFeatureEnum.SENSOR_FILTER_LIFETIME,
                 DeviceFeatureEnum.SELECT_WIND_SPEED, 
                 DeviceFeatureEnum.SELECT_WORK_MODE
             ]
