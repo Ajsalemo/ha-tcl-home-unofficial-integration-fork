@@ -1013,7 +1013,11 @@ async def async_setup_entry(
                     options_values_fn=lambda device: [
                         e.value for e in AirPurifierWorkModeStrEnum
                     ],
-                    available_fn=lambda device: get_WORK_MODE_available_fn(device),
+                    available_fn=lambda device: (
+                        get_WORK_MODE_available_fn(device)
+                        if device.data.power_switch == 1
+                        else False
+                    ),
                 )
             )
 
