@@ -65,7 +65,10 @@ class DesiredStateHandlerForSelect:
                     value=value
                 )
             case DeviceFeatureEnum.SELECT_WIND_SPEED:
-                if self.device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3 or self.device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:
+                if (
+                    self.device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3
+                    or self.device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5
+                ):
                     return await self.AIR_PURIFIER_BREEVA_FAN_WIND_SPEED(value=value)
                 else:
                     return await self.SELECT_WIND_SPEED(value=value)
@@ -115,7 +118,10 @@ class DesiredStateHandlerForSelect:
                         self.device.data.work_mode, default_ac_mode
                     )
             case DeviceFeatureEnum.SELECT_WIND_SPEED:
-                if self.device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3 or self.device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:
+                if (
+                    self.device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3
+                    or self.device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5
+                ):
                     return getAirPurifierFanWindSpeed(self.device.data.wind_speed)
                 else:
                     return getWindSpeed(
@@ -183,7 +189,10 @@ class DesiredStateHandlerForSelect:
             case DeviceFeatureEnum.SELECT_DEHUMIDIFIER_WIND_SPEED_LOW_MEDIUM_HEIGH:
                 return [e.value for e in WindSpeedLowMediumHigh]
             case DeviceFeatureEnum.SELECT_WIND_SPEED:
-                if self.device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3 or self.device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:
+                if (
+                    self.device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3
+                    or self.device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5
+                ):
                     return [e.value for e in AirPurifierFanWindSpeedStrEnum]
                 else:
                     return [e.value for e in WindSeedEnum]
@@ -384,12 +393,14 @@ class DesiredStateHandlerForSelect:
         return await self.coordinator.get_aws_iot().async_set_desired_state(
             self.device.device_id, desired_state
         )
-    
+
     async def AIR_PURIFIER_BREEVA_FAN_WIND_SPEED(
         self, value: AirPurifierFanWindSpeedStrEnum
     ):
         stored_data = await get_stored_data(self.hass, self.device.device_id)
-        _LOGGER.info("AIR_PURIFIER_BREEVA_FAN_WIND_SPEED - stored_data: %s", stored_data)
+        _LOGGER.info(
+            "AIR_PURIFIER_BREEVA_FAN_WIND_SPEED - stored_data: %s", stored_data
+        )
         mode = self.device.mode_value_to_enum_mapp.get(
             self.device.data.work_mode, AirPurifierFanWindSpeedStrEnum.LOW
         )
@@ -398,7 +409,7 @@ class DesiredStateHandlerForSelect:
         )
         if need_save:
             await set_stored_data(self.hass, self.device.device_id, stored_data)
-            
+
         desired_state = {}
         _LOGGER.info("Setting AIR_PURIFIER_BREEVA_FAN_WIND_SPEED to %s", value)
         match value:
@@ -411,7 +422,7 @@ class DesiredStateHandlerForSelect:
         return await self.coordinator.get_aws_iot().async_set_desired_state(
             self.device.device_id, desired_state
         )
-    
+
     async def SELECT_WORK_MODE(self, value: AirPurifierWorkModeStrEnum):
         stored_data = await get_stored_data(self.hass, self.device.device_id)
         _LOGGER.info("SELECT_WORK_MODE - stored_data: %s", stored_data)
@@ -423,7 +434,7 @@ class DesiredStateHandlerForSelect:
         )
         if need_save:
             await set_stored_data(self.hass, self.device.device_id, stored_data)
-            
+
         desired_state = {}
         _LOGGER.info("Setting SELECT_WORK_MODE to %s", value)
         match value:
@@ -867,15 +878,23 @@ def get_SELECT_WIND_SPEED_available_fn(device: Device) -> str:
 
 
 def get_AIR_PURIFIER_BREEVA_FAN_WIND_SPEED_available_fn(device: Device) -> str:
-    _LOGGER.info("Checking work_mode for device %s: %s", device.device_id, device.data.work_mode)
-    mode = device.mode_value_to_enum_mapp.get(device.data.work_mode, AirPurifierFanWindSpeedStrEnum.LOW)
+    _LOGGER.info(
+        "Checking work_mode for device %s: %s", device.device_id, device.data.work_mode
+    )
+    mode = device.mode_value_to_enum_mapp.get(
+        device.data.work_mode, AirPurifierFanWindSpeedStrEnum.LOW
+    )
     _LOGGER.info("Determined mode for device %s: %s", device.device_id, mode)
     return mode
 
 
 def get_WORK_MODE_available_fn(device: Device) -> str:
-    _LOGGER.info("Checking work_mode for device %s: %s", device.device_id, device.data.work_mode)
-    mode = device.mode_value_to_enum_mapp.get(device.data.work_mode, AirPurifierWorkModeStrEnum.AUTO)
+    _LOGGER.info(
+        "Checking work_mode for device %s: %s", device.device_id, device.data.work_mode
+    )
+    mode = device.mode_value_to_enum_mapp.get(
+        device.data.work_mode, AirPurifierWorkModeStrEnum.AUTO
+    )
     _LOGGER.info("Determined mode for device %s: %s", device.device_id, mode)
     return mode
 
@@ -915,7 +934,9 @@ async def async_setup_entry(
     switches = []
     for device in config_entry.devices:
         _LOGGER.info(
-            "Device %s supported features: %s", device.device_type, device.supported_features
+            "Device %s supported features: %s",
+            device.device_type,
+            device.supported_features,
         )
         if DeviceFeatureEnum.SELECT_MODE in device.supported_features:
             switches.append(
@@ -930,8 +951,10 @@ async def async_setup_entry(
                 )
             )
 
-    
-        if device.device_type != DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3 and device.device_type != DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:
+        if (
+            device.device_type != DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3
+            and device.device_type != DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5
+        ):
             if DeviceFeatureEnum.SELECT_WIND_SPEED in device.supported_features:
                 switches.append(
                     DynamicSelectHandler(
@@ -942,14 +965,21 @@ async def async_setup_entry(
                         type="WindSpeed",
                         name="Wind Speed",
                         icon_fn=lambda device: "mdi:weather-windy",
-                        options_values_fn=lambda device: [e.value for e in WindSeedEnum],
+                        options_values_fn=lambda device: [
+                            e.value for e in WindSeedEnum
+                        ],
                         available_fn=lambda device: get_SELECT_WIND_SPEED_available_fn(
                             device
                         ),
                     )
                 )
-        elif device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3 or device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:
+        elif (
+            device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3
+            or device.device_type == DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5
+        ):
             if DeviceFeatureEnum.SELECT_WIND_SPEED in device.supported_features:
+                # If the power is on, show the wind speed select
+                # Otherwise, disable the wind speed select
                 switches.append(
                     DynamicSelectHandler(
                         hass=hass,
@@ -959,13 +989,17 @@ async def async_setup_entry(
                         type="WindSpeed",
                         name="Wind Speed",
                         icon_fn=lambda device: "mdi:weather-windy",
-                        options_values_fn=lambda device: [e.value for e in AirPurifierFanWindSpeedStrEnum],
-                        available_fn=lambda device: get_AIR_PURIFIER_BREEVA_FAN_WIND_SPEED_available_fn(
-                            device
+                        options_values_fn=lambda device: [
+                            e.value for e in AirPurifierFanWindSpeedStrEnum
+                        ],
+                        available_fn=lambda device: (
+                            get_AIR_PURIFIER_BREEVA_FAN_WIND_SPEED_available_fn(device)
+                            if device.data.power_switch == 1
+                            else False
                         ),
                     )
                 )
-        
+
         if DeviceFeatureEnum.SELECT_WORK_MODE in device.supported_features:
             switches.append(
                 DynamicSelectHandler(
@@ -976,10 +1010,10 @@ async def async_setup_entry(
                     type="WorkMode",
                     name="Work Mode",
                     icon_fn=lambda device: "mdi:air-filter",
-                    options_values_fn=lambda device: [e.value for e in AirPurifierWorkModeStrEnum],
-                    available_fn=lambda device: get_WORK_MODE_available_fn(
-                        device
-                    ),
+                    options_values_fn=lambda device: [
+                        e.value for e in AirPurifierWorkModeStrEnum
+                    ],
+                    available_fn=lambda device: get_WORK_MODE_available_fn(device),
                 )
             )
 
