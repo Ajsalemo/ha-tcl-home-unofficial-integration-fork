@@ -879,13 +879,13 @@ def get_SELECT_WIND_SPEED_available_fn(device: Device) -> str:
 
 def get_AIR_PURIFIER_BREEVA_FAN_WIND_SPEED_available_fn(device: Device) -> str:
     _LOGGER.info(
-        "Checking work_mode for device %s: %s", device.device_id, device.data.work_mode
+        "Checking wind_speed for device %s: %s", device.device_id, device.data.wind_speed
     )
-    mode = device.mode_value_to_enum_mapp.get(
-        device.data.work_mode, AirPurifierFanWindSpeedStrEnum.LOW
+    wind_speed = device.mode_value_to_enum_mapp.get(
+        device.data.wind_speed, AirPurifierFanWindSpeedStrEnum.LOW
     )
-    _LOGGER.info("Determined mode for device %s: %s", device.device_id, mode)
-    return mode
+    _LOGGER.info("Determined wind_speed for device %s: %s", device.device_id, wind_speed)
+    return wind_speed
 
 
 def get_WORK_MODE_available_fn(device: Device) -> str:
