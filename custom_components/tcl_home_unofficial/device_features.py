@@ -43,6 +43,7 @@ class DeviceFeatureEnum(StrEnum):
     SWITCH_8_C_HEATING = "switch.8CHeating"
     SWITCH_SOFT_WIND = "switch.softWind"
     SWITCH_FRESH_AIR = "switch.freshAir"
+    SWITCH_SHIELD_SWITCH = "switch.shieldSwitch"
     SELECT_MODE = "select.mode"
     SELECT_DEHUMIDIFIER_WIND_SPEED_LOW_MEDIUM_HEIGH = "select.dehumidifier.windSpeed.lowMediumHigh"
     SELECT_WIND_SPEED = "select.windSpeed"
@@ -390,6 +391,7 @@ def getSupportedFeatures(
         case DeviceTypeEnum.AIR_PURIFIER_BREEVA_A3 | DeviceTypeEnum.AIR_PURIFIER_BREEVA_A5:
             features = [
                 DeviceFeatureEnum.SWITCH_POWER,
+                DeviceFeatureEnum.SWITCH_SHIELD_SWITCH
                 DeviceFeatureEnum.SENSOR_IS_ONLINE,
                 DeviceFeatureEnum.SENSOR_FILTER_LIFETIME,
                 DeviceFeatureEnum.SENSOR_PM25_SENSOR_VALUE,
