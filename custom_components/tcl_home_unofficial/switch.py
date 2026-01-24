@@ -146,6 +146,12 @@ class DesiredStateHandlerForSwitch:
         )
 
     async def SWITCH_SHIELD_SWITCH(self, value: int):
+        # If the device is off, do not allow changing the shield switch
+        # Disble the switch action but keep the saved state of shieldSwitch
+        if self.device.data.power_switch == 0:
+            _LOGGER.info("Device is off. Keeping shield switch state.")
+            return
+        
         _LOGGER.info("Setting shield switch to %s", value)
         desired_state = {"shieldSwitch": value}
         return await self.coordinator.get_aws_iot().async_set_desired_state(
@@ -282,14 +288,10 @@ async def async_setup_entry(
                     type="ShieldSwitch",
                     name="Shield Switch",
                     icon_fn=lambda device: (
-                        "mdi:shield-check" if device.data.power_switch == 1 
-                        else False
+                        "mdi:shield-check" if device.data.shield_switch == 1 
+                        else "mdi:shield-off"
                     ),
-                    is_on_fn=lambda device: (
-                        device.data.shield_switch
-                        if device.data.power_switch == 1 
-                        else False
-                    ),
+                    is_on_fn=lambda device: device.data.shield_switch,
                 )
             )
 
