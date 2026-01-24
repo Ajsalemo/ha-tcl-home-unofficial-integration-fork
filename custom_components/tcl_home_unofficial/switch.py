@@ -133,6 +133,7 @@ class DesiredStateHandlerForSwitch:
             case DeviceFeatureEnum.SWITCH_SHIELD_SWITCH:
                 if self.device.data.power_switch == 0:
                     return False
+                return True
             case _:
                 return True
 
