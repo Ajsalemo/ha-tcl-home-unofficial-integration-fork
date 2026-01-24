@@ -130,6 +130,9 @@ class DesiredStateHandlerForSwitch:
                     return False
                 else:
                     return True
+            # If the power switch is off, shield switch cannot be changed
+            # The TCL app has this disabled - but still loads the last known state
+            # This is close enough to the behavior without writing a whole new switch class
             case DeviceFeatureEnum.SWITCH_SHIELD_SWITCH:
                 if self.device.data.power_switch == 0:
                     return False
