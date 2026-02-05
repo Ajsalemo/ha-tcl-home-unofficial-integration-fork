@@ -389,7 +389,6 @@ def getAirPurifierFanWindSpeed(windSpeed: int) -> AirPurifierFanWindSpeedEnum:
 
 
 def getAirPurifierWorkMode(workMode: int) -> AirPurifierWorkModeEnum:
-    _LOGGER.info(f"Getting Air Purifier Work Mode for workMode: {workMode}")
     match workMode:
         case 0:
             return AirPurifierWorkModeStrEnum.AUTO
